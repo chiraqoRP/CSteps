@@ -539,14 +539,14 @@ end)
 
 -- REFERENCE: https://github.com/SmileyAG/cstrike15_src-CI/blob/clean/game/shared/shareddefs.h#L434
 -- https://github.com/SmileyAG/cstrike15_src-CI/blob/clean/game/shared/gamemovement.cpp#L4343-L4388
-local PLAYER_FALL_PUNCH_THRESHOLD = 350
+local PLAYER_FALL_PUNCH_THRESHOLD = 150
 
 hook.Add("OnPlayerHitGround", "CSteps.DoLandSound", function(ply, inWater, onFloater, speed)
     if speed < PLAYER_FALL_PUNCH_THRESHOLD or !enabled:GetBool() or (CLIENT and !IsFirstTimePredicted()) then
         return
     end
 
-    local moveMode = speed > 400 and MOVEMODE_SPRINT or MOVEMODE_WALK
+    local moveMode = speed > PLAYER_FALL_PUNCH_THRESHOLD * 2 and MOVEMODE_SPRINT or MOVEMODE_WALK
     local filter = nil
 
     if SERVER then
@@ -559,6 +559,7 @@ hook.Add("OnPlayerHitGround", "CSteps.DoLandSound", function(ply, inWater, onFlo
 end)
 
 local ladderPath = "player/footsteps/ladder"
+local chainPath = "player/footsteps/chainl"
 local footstepPath = "player/footsteps/"
 local altPaths = {
     ["physics/plaster/drywall_footst"] = true,
@@ -571,7 +572,7 @@ hook.Add("EntityEmitSound", "CSteps.MaskDefaultSteps", function(t)
     local fPath = string.Left(snd, 23)
 
     -- Preserve ladder sounds.
-    if fPath == ladderPath then
+    if fPath == ladderPath or fPath == chainPath then
         return
     end
 
