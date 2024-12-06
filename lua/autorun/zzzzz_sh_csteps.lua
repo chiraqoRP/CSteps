@@ -459,15 +459,12 @@ local function GetFootSurface(ply, startPos, footOffset)
         footTr = DoFootTrace(ply, ply:LocalToWorld(Vector(0, footOffset * -1, 16)))
 
         -- If that still doesn't work (both feet dangling off), trace with the players origin.
-        if !footTr.Hit then 
+        if !footTr.Hit then
             footTr = DoFootTrace(ply, ply:GetPos() + trAddPly)
         end
     end
 
     local matType = footTr.MatType
-
-    -- print("matType: ", matType)
-    -- print("surfaceProps: ", util.GetSurfacePropName(footTr.SurfaceProps))
 
     if footTr.Hit then
         local surfaceProp = util.GetSurfacePropName(footTr.SurfaceProps)
@@ -478,7 +475,7 @@ local function GetFootSurface(ply, startPos, footOffset)
     return matType
 end
 
-local function DoFootstepSound(ply, foot, vol, filter, sndLvl, moveMode)
+local function DoFootstepSound(ply, foot, vol, filter, lvl, moveMode)
     -- ENT:IsFlagSet is a bit faster than ENT:OnGround/ENT:IsOnGround.
     if !ply:IsFlagSet(FL_ONGROUND) then
         return
@@ -505,9 +502,12 @@ local function DoFootstepSound(ply, foot, vol, filter, sndLvl, moveMode)
         return
     end
 
-    local lvl = sndLvl or isSprinting and 85 or 75
+    ply:EmitSound(footstepSnd, lvl or 75, 100, vol or 1, CHAN_STATIC, 0, 0, filter)
+end
 
-    ply:EmitSound(footstepSnd, lvl, 100, vol or 1, CHAN_STATIC, 0, 0, filter)
+local function IsSliding(ply)
+    -- REFERENCE: https://github.com/ZenkakuHiragana/sliding_ability/blob/master/lua/autorun/sliding_ability.lua#L173
+    return ply:GetNWBool("SlidingAbilityIsSliding", false)
 end
 
 local cf = bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED)
@@ -523,7 +523,7 @@ hook.Add("PlayerFootstep", "CSteps.DoFootstep", function(ply, pos, foot, snd, vo
         return true
     end
 
-    if !enabled:GetBool() or (TrueSlide and ply:GetNW2Bool("TrueSlide.IsSliding", false)) then
+    if !enabled:GetBool() or IsSliding(ply) then
         return
     end
 
@@ -546,8 +546,6 @@ hook.Add("OnPlayerHitGround", "CSteps.DoLandSound", function(ply, inWater, onFlo
         return
     end
 
-    local mul = speed > 250 and speed / 250 or 0
-    local lvl = math.Clamp(mul * 25 + 75, 75, 125)
     local moveMode = speed > 400 and MOVEMODE_SPRINT or MOVEMODE_WALK
     local filter = nil
 
