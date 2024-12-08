@@ -506,6 +506,10 @@ local function DoFootstepSound(ply, foot, vol, filter, lvl, moveMode)
 end
 
 local function IsSliding(ply)
+    if CSlide then
+        return ply:IsSliding()
+    end
+
     -- REFERENCE: https://github.com/ZenkakuHiragana/sliding_ability/blob/master/lua/autorun/sliding_ability.lua#L173
     return ply:GetNWBool("SlidingAbilityIsSliding", false)
 end
