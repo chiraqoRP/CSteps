@@ -515,8 +515,8 @@ local function IsSliding(ply)
 end
 
 local cf = bit.bor(FCVAR_ARCHIVE, FCVAR_REPLICATED)
-local silenceFootsteps = CreateConVar("sv_csteps_silencefootsteps", 1, cf, "", 0, 1)
-local enabled = CreateConVar("sv_csteps_enable", 1, cf, "", 0, 1)
+local silenceFootsteps = CreateConVar("sv_csteps_silencefootsteps", 1, cf, "Enables/disables footsteps being silenced when +walk is held.", 0, 1)
+local enabled = CreateConVar("sv_csteps_enable", 1, cf, "Enables/disables custom footsteps.", 0, 1)
 local enforcedSnds = {
     ["ladder"] = true,
     ["chainlink"] = true
@@ -572,6 +572,10 @@ local altPaths = {
 }
 
 hook.Add("EntityEmitSound", "CSteps.MaskDefaultSteps", function(t)
+    if !enabled:GetBool() then
+        return
+    end
+
     local snd = t.OriginalSoundName
     local fPath = string.Left(snd, 23)
 
