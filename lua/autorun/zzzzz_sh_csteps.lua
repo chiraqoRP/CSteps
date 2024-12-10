@@ -481,9 +481,9 @@ local function DoFootstepSound(ply, foot, vol, filter, lvl, moveMode)
         return
     end
 
-    -- Left: -7.5
-    -- Right: 7.5
-    local footOffset = (foot - .5) * 15
+    -- Left: -6
+    -- Right: 6
+    local footOffset = (foot - .5) * 12
     local startPos = ply:LocalToWorld(Vector(0, footOffset, 16))
     local matType = GetFootSurface(ply, startPos, footOffset)
 
@@ -529,6 +529,12 @@ hook.Add("PlayerFootstep", "CSteps.DoFootstep", function(ply, pos, foot, snd, vo
 
     if !enabled:GetBool() or IsSliding(ply) then
         return
+    end
+
+    -- HACK: Why the fuck are foot numbers reversed for the local playey on clientside.
+    -- TODO: Check if this happens on dedicated servers.
+    if CLIENT and ply == LocalPlayer() then
+        foot = foot == 0 and 1 or 0
     end
 
     local sndName = string.sub(snd, 18, -6)
