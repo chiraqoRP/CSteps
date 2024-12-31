@@ -476,6 +476,11 @@ local function GetFootSurface(ply, startPos, footOffset)
 end
 
 local function DoFootstepSound(ply, foot, vol, filter, lvl, moveMode)
+    -- Using a pill? Don't play footsteps.
+    if pk_pills and pk_pills.getMappedEnt(ply) then
+        return
+    end
+
     -- ENT:IsFlagSet is a bit faster than ENT:OnGround/ENT:IsOnGround.
     if !ply:IsFlagSet(FL_ONGROUND) then
         return
