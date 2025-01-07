@@ -28,6 +28,34 @@ local MOVEMODE_SPRINT = 2
 
 local dir = ")player/footsteps/csteps/%s"
 local footstepSounds = {
+    ["carpet"] = {
+        [MOVEMODE_WALK] = {
+            string.format(dir, "carpet/carpet_walk1.ogg"),
+            string.format(dir, "carpet/carpet_walk2.ogg"),
+            string.format(dir, "carpet/carpet_walk3.ogg"),
+            string.format(dir, "carpet/carpet_walk4.ogg"),
+            string.format(dir, "carpet/carpet_walk5.ogg"),
+            string.format(dir, "carpet/carpet_walk6.ogg"),
+            string.format(dir, "carpet/carpet_walk7.ogg"),
+            string.format(dir, "carpet/carpet_walk8.ogg"),
+            string.format(dir, "carpet/carpet_walk9.ogg"),
+            string.format(dir, "carpet/carpet_walk10.ogg"),
+            string.format(dir, "carpet/carpet_walk11.ogg")
+        },
+        [MOVEMODE_SPRINT] = {
+            string.format(dir, "carpet/carpet_walk1.ogg"),
+            string.format(dir, "carpet/carpet_walk2.ogg"),
+            string.format(dir, "carpet/carpet_walk3.ogg"),
+            string.format(dir, "carpet/carpet_walk4.ogg"),
+            string.format(dir, "carpet/carpet_walk5.ogg"),
+            string.format(dir, "carpet/carpet_walk6.ogg"),
+            string.format(dir, "carpet/carpet_walk7.ogg"),
+            string.format(dir, "carpet/carpet_walk8.ogg"),
+            string.format(dir, "carpet/carpet_walk9.ogg"),
+            string.format(dir, "carpet/carpet_walk10.ogg"),
+            string.format(dir, "carpet/carpet_walk11.ogg")
+        }
+    },
     ["concrete"] = {
         [MOVEMODE_WALK] = {
             string.format(dir, "concrete/concrete_walk1.ogg"),
@@ -386,6 +414,7 @@ footstepSounds.plaster = footstepSounds.wood
 
 local MAT_GRAVEL = 91
 local MAT_WOODPANEL = 92
+local MAT_CARPET = 93
 local matSndTypes = {
     [MAT_GRASS] = "grass",
     [MAT_CONCRETE] = "concrete",
@@ -402,7 +431,8 @@ local matSndTypes = {
     [MAT_COMPUTER] = "metal",
     [MAT_VENT] = "metalvent",
     [MAT_GRAVEL] = "gravel",
-    [MAT_WOODPANEL] = "wood_panel"
+    [MAT_WOODPANEL] = "wood_panel",
+    [MAT_CARPET] = "carpet"
 }
 
 local function GetFootstepSound(ply, matType, moveMode)
@@ -448,7 +478,8 @@ local surfaceMats = {
     ["rubber"] = MAT_PLASTIC,
     ["wood_panel"] = MAT_WOODPANEL,
     ["mud"] = MAT_SLOSH,
-    ["gravel"] = MAT_GRAVEL
+    ["gravel"] = MAT_GRAVEL,
+    ["carpet"] = MAT_CARPET
 }
 
 local function GetFootSurface(ply, startPos, footOffset)
