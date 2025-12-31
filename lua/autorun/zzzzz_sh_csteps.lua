@@ -558,7 +558,7 @@ local enforcedSnds = {
     ["chainlink"] = true
 }
 
-hook.Add("PlayerFootstep", "CSteps.DoFootstep", function(ply, pos, foot, snd, vol, filter)
+hook.Add("PlayerFootstep", "CSteps.FootstepSound", function(ply, pos, foot, snd, vol, filter)
     if silenceFootsteps:GetBool() and ply:IsWalking() then
         return true
     end
@@ -587,7 +587,7 @@ end)
 -- https://github.com/SmileyAG/cstrike15_src-CI/blob/clean/game/shared/gamemovement.cpp#L4343-L4388
 local PLAYER_FALL_PUNCH_THRESHOLD = 150
 
-hook.Add("OnPlayerHitGround", "CSteps.DoLandSound", function(ply, inWater, onFloater, speed)
+hook.Add("OnPlayerHitGround", "CSteps.LandSound", function(ply, inWater, onFloater, speed)
     if speed < PLAYER_FALL_PUNCH_THRESHOLD or !enabled:GetBool() or (CLIENT and !IsFirstTimePredicted()) then
         return
     end
@@ -595,7 +595,7 @@ hook.Add("OnPlayerHitGround", "CSteps.DoLandSound", function(ply, inWater, onFlo
     local moveMode = speed > PLAYER_FALL_PUNCH_THRESHOLD * 2 and MOVEMODE_SPRINT or MOVEMODE_WALK
     local filter = nil
 
-    if SERVER then
+    if SERVER and !game.SinglePlayer() then
         filter = RecipientFilter()
         filter:AddPAS(ply:GetPos())
         filter:RemovePlayer(ply)
